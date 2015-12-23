@@ -16,6 +16,7 @@ Then, in your Capfile:
 require 'capistrano/server'
 ```
 You also need to have a `config/deploy/config` directory with at least a config file for puma named `puma.rb`.
+Finally, set the url of your website in your deploy file: `set :url, "example.com"`.
 
 ## Usage
 
