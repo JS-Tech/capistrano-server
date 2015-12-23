@@ -1,0 +1,5 @@
+load File.expand_path("../tasks/check_revision.rake", __FILE__)
+load File.expand_path("../tasks/nginx.rake", __FILE__)
+load File.expand_path("../tasks/puma.rake", __FILE__)
+load File.expand_path("../tasks/setup_config.rake", __FILE__)
+load File.expand_path("../tasks/tasks.rake", __FILE__)
