@@ -29,7 +29,7 @@ set :server_files, [{
 }]
 ```
 
-If you need to deploy multiple apps to the same server, specify the following options in your `deploy.rb`:
+If you need to deploy multiple apps to the same server, specify the following option in your main application's deploy file:
 ```ruby
 set :applications, ["app1", "app2", "app3"]
 ```
