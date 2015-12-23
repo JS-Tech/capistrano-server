@@ -11,11 +11,11 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "Capistrano tasks & files to help server deployment with nginx & puma."
   spec.description   = "Capistrano tasks & files to help server deployment with nginx & puma."
-  spec.homepage      = "www.github.com/JS-Tech/capistrano-server"
+  spec.homepage      = "http://github.com/JS-Tech/capistrano-server"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.require_paths = ["lib"]
 
-  gem.add_dependency 'capistrano', '~> 3.1'
+  spec.add_dependency 'capistrano', '~> 3.1'
 end

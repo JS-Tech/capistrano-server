@@ -3,13 +3,13 @@ namespace :puma do
     desc "#{task} Puma"
     task task_name do
       on roles(:app), in: :sequence, wait: 5 do
-        sudo "service puma #{task_name} app=#{current_path}", raise_on_non_zero_exit: false
+        sudo "#{task_name} puma app=#{current_path}", raise_on_non_zero_exit: false
       end
     end
   end
 
-  before :setup_config, "puma:stop"
-  after :setup_config, "puma:start"
+  before "server:setup", "puma:stop"
+  after "server:setup", "puma:start"
 
-  after :publishing, "puma:restart"
+  after "server:setup", "puma:restart"
 end

@@ -8,5 +8,5 @@ namespace :nginx do
     end
   end
 
-  after :setup_config, "nginx:reload"
+  after "server:setup", "nginx:reload"
 end

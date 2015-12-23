@@ -1,0 +1,3 @@
+<%- fetch(:applications, [fetch(:application)]).each do |app| -%>
+<%= "/home/#{fetch(:deploy_user)}/apps/#{app}/current" %>
+<%- end -%>
