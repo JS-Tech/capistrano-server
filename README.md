@@ -39,6 +39,11 @@ And in your side applications:
 set :side_app, true
 ```
 
+If you want to use SSL, tell the gem to use the correct Nginx config:
+```ruby
+set :ssl, true
+```
+
 The gem provide a task to run application's tasks on the server: `cap stage tasks:invoke task='permission:add'`
 
 ## License
