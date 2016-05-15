@@ -14,6 +14,7 @@ server {
 server {
   <%- if fetch(:ssl, false) -%>
   listen 443 <%= "default_server" unless fetch(:side_app, false) %> ssl;
+  listen [::]:443 <%= "default_server" unless fetch(:side_app, false) %> ssl;
   ssl_certificate /etc/nginx/ssl/certificate.pem;
   ssl_certificate_key /etc/nginx/ssl/key.pem;
   ssl on;
