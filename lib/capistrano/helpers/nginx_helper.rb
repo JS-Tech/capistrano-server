@@ -2,7 +2,7 @@ module NginxHelper
 
   def server_name
     if subdomains = fetch(:subdomains)
-      subdomains = "(" + subdomains.join("|") + "\\.)?"
+      subdomains = "((" + subdomains.join("|") + ")\\.)?"
     end
     url = fetch(:url, "localhost")
     "~^(www\\.)?#{subdomains}#{url}$"
