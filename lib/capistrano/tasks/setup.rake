@@ -1,3 +1,7 @@
+require 'capistrano/helpers/nginx_helper'
+
+include NginxHelper
+
 namespace :server do
   desc "Create and update the config files"
   task :setup do
@@ -61,7 +65,4 @@ namespace :server do
 
   before "server:setup", "server:defaults"
 
-  def erb_eval(path)
-      StringIO.new(ERB.new(File.read(path), nil, '-').result(binding))
-  end
 end

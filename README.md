@@ -44,6 +44,11 @@ If you want to use SSL, tell the gem to use the correct Nginx config:
 set :ssl, true
 ```
 
+If you have subdomains, specify them:
+```ruby
+set :subdomains, ["sub1", "sub2"]
+```
+
 The gem provide a task to run application's tasks on the server: `cap stage tasks:invoke task='permission:add'`
 
 ## License
