@@ -2,14 +2,21 @@ module NginxHelper
 
   def server_name
     if subdomains = fetch(:subdomains)
-      subdomains = "((" + subdomains.join("|") + ")\\.)?"
+      subdomains = "(?<subdomains>(" + subdomains.join("|") + ")\\.)?"
     end
-    url = fetch(:url, "localhost")
     "~^(www\\.)?#{subdomains}#{url}$"
+  end
+
+  def return_url
+    "https://${subdomains}#{url}${request_uri}"
   end
 
   def ssl?
     fetch(:ssl, false)
+  end
+
+  def url
+    fetch(:url, "localhost")
   end
 
   def default_server
