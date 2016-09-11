@@ -1,0 +1,25 @@
+[Unit]
+Description=Puma HTTP Server
+After=network.target
+
+# Uncomment for socket activation (see below)
+# Requires=puma.socket
+
+[Service]
+# Foreground process (do not use --daemon in ExecStart or config.rb)
+Type=simple
+
+# Preferably configure a non-privileged user
+User=<%= fetch(:deploy_user) %>
+
+# Specify the path to your puma application root
+WorkingDirectory=<%= fetch(:deploy_to) %>/current
+
+# Alternatively with a config file (in WorkingDirectory) and
+# comparable `bind` directives
+ExecStart=bundle exec puma -C config/puma.rb
+
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

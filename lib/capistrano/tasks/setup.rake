@@ -34,9 +34,6 @@ namespace :server do
         upload! eval_file, file_path # upload to the remote server
         sudo :ln, "-nfs #{file_path} #{file[:path]}" # symlinks
       end
-
-      # reload /etc/init
-      sudo :initctl, "reload-configuration"
     end
   end
 
@@ -49,17 +46,9 @@ namespace :server do
       ]
       set :puma_files, [
            {
-               name: "puma-manager.conf.erb",
-               path: "/etc/init/puma-manager.conf"
+               name: "puma.service.erb",
+               path: "/etc/systemd/system/multi-user.target.wants/puma.service"
            },
-           {
-               name: "puma-upstart.conf.erb",
-               path: "/etc/init/puma.conf"
-           },
-           {
-               name: "puma.conf.erb",
-               path: "/etc/puma.conf"
-           }
        ]
   end
 
