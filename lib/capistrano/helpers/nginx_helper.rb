@@ -8,7 +8,11 @@ module NginxHelper
   end
 
   def return_url
-    "https://${subdomains}#{url}${request_uri}"
+    if fetch(:subdomains)
+      "https://${subdomains}#{url}${request_uri}"
+    else
+      "https://#{url}${request_uri}"
+    end
   end
 
   def ssl?
