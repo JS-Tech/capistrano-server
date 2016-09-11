@@ -17,7 +17,7 @@ WorkingDirectory=<%= fetch(:deploy_to) %>/current
 
 # Alternatively with a config file (in WorkingDirectory) and
 # comparable `bind` directives
-ExecStart=bundle exec puma -C config/puma.rb
+ExecStart=/usr/local/rvm/wrappers/default/bundle exec puma -C config/puma.rb
 
 Restart=always
 
