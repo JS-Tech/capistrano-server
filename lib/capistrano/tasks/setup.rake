@@ -34,6 +34,9 @@ namespace :server do
         upload! eval_file, file_path # upload to the remote server
         sudo :ln, "-nfs #{file_path} #{file[:path]}" # symlinks
       end
+
+      # reload
+      sudo :systemctl, "daemon-reload"
     end
   end
 
