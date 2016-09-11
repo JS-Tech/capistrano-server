@@ -3,7 +3,7 @@ namespace :nginx do
     desc "#{task } Nginx"
     task task_name do
       on roles(:app), in: :sequence, wait: 5 do
-        sudo "#{task_name} nginx"
+        sudo "systemctl #{task_name} nginx.service"
       end
     end
   end
