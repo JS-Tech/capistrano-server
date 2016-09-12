@@ -9,4 +9,6 @@ namespace :nginx do
   end
 
   after "server:setup", "nginx:reload"
+
+  after "deploy:finished", "nginx:restart"
 end

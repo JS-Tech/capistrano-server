@@ -21,8 +21,7 @@ namespace :server do
         end
       end
 
-      files = fetch(:nginx_files).concat(fetch(:server_files, []))
-      files.concat(fetch(:puma_files)) unless fetch(:side_app, false)
+      files = fetch(:nginx_files) + fetch(:server_files, [])) + fetch(:puma_files)
       files.each do |file|
         raw_filename = file[:name].gsub(/.erb/, '')
         file_path = "#{shared_path}/server/#{raw_filename}"
@@ -32,11 +31,13 @@ namespace :server do
             erb_eval(File.expand_path("../../files/#{file[:name]}", __FILE__))
         end
         upload! eval_file, file_path # upload to the remote server
-        sudo :ln, "-nfs #{file_path} #{file[:path]}" # symlinks
+        sudo :cp, "#{file_path} #{file[:path]}" # copy
       end
 
-      # reload
+      # reload systemd
       sudo :systemctl, "daemon-reload"
+      # enable service
+      sudo :systemctl, :enable, "puma_#{fetch(:application)}.service"
     end
   end
 
@@ -50,7 +51,7 @@ namespace :server do
       set :puma_files, [
            {
                name: "puma.service.erb",
-               path: "/etc/systemd/system/multi-user.target.wants/puma.service"
+               path: "/etc/systemd/system/multi-user.target.wants/puma_#{fetch(:application)}.service"
            },
        ]
   end
