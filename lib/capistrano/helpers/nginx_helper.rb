@@ -27,8 +27,4 @@ module NginxHelper
     "default_server" unless fetch(:side_app, false)
   end
 
-  def erb_eval(path)
-    StringIO.new(ERB.new(File.read(path), nil, '-').result(binding))
-  end
-
 end
