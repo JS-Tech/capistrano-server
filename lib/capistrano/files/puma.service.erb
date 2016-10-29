@@ -13,7 +13,7 @@ User=<%= fetch(:deploy_user) %>
 WorkingDirectory=<%= fetch(:deploy_to) %>/current
 
 # Start command
-ExecStart=~/.rvm/bin/rvm default do bundle exec puma -C config/puma.rb
+ExecStart=/home/<%= fetch(:deploy_user) %>/.rvm/bin/rvm default do bundle exec puma -C config/puma.rb
 
 Restart=always
 
