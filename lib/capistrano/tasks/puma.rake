@@ -11,7 +11,7 @@ namespace :puma do
   before "server:setup", "puma:stop"
   after "server:setup", "puma:start"
 
-  after "deploy:finished", "stop"
-  after "deploy:finished", "start"
+  after "deploy:finished", "puma:stop"
+  after "deploy:finished", "puma:start"
   after "deploy:finished", "nginx:restart"
 end
