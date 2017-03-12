@@ -8,11 +8,7 @@ module NginxHelper
   end
 
   def return_url
-    if fetch(:subdomains)
-      "https://${subdomains}#{url}${request_uri}"
-    else
-      "https://#{url}${request_uri}"
-    end
+    "https://${subdomains}#{url}${request_uri}"
   end
 
   def ssl?
@@ -25,6 +21,10 @@ module NginxHelper
 
   def default_server
     "default_server" unless fetch(:side_app, false)
+  end
+
+  def erb_eval(path)
+    StringIO.new(ERB.new(File.read(path), nil, '-').result(binding))
   end
 
 end

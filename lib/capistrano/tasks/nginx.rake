@@ -3,12 +3,10 @@ namespace :nginx do
     desc "#{task } Nginx"
     task task_name do
       on roles(:app), in: :sequence, wait: 5 do
-        sudo "systemctl #{task_name} nginx.service"
+        sudo "#{task_name} nginx"
       end
     end
   end
 
   after "server:setup", "nginx:reload"
-
-  after "deploy:finished", "nginx:restart"
 end

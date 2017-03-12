@@ -1,24 +1,15 @@
 require 'capistrano/helpers/nginx_helper'
-require 'capistrano/helpers/server_helper'
 
 include NginxHelper
-include ServerHelper
 
 namespace :server do
-
-  task :setup => [:defaults, :base, :linked_files, :server_files, :services]
-
-  desc "Prepare the server to receive the config"
-  task :base do
+  desc "Create and update the config files"
+  task :setup do
     on roles(:app) do
+
       execute :mkdir, "-p #{shared_path}/config"
       execute :mkdir, "-p #{shared_path}/server"
-    end
-  end
 
-  desc "Install linked files"
-  task :linked_files do
-    on roles(:app) do
       fetch(:linked_files).each do |filename|
         unless test("[ -f #{shared_path}/#{filename} ]")
           file = begin
@@ -29,50 +20,49 @@ namespace :server do
           upload! file, "#{shared_path}/#{filename}"
         end
       end
-    end
-  end
 
-  desc "Install the server files"
-  task :server_files do
-    on roles(:app) do
-      files = fetch(:nginx_files) + fetch(:server_files, [])
+      files = fetch(:nginx_files).concat(fetch(:server_files, []))
+      files.concat(fetch(:puma_files)) unless fetch(:side_app, false)
       files.each do |file|
-        file_path = upload_to_server(file)
-        sudo :ln, "-nfs #{file_path} #{file[:path]}" # symlink
+        raw_filename = file[:name].gsub(/.erb/, '')
+        file_path = "#{shared_path}/server/#{raw_filename}"
+        eval_file = begin
+            erb_eval("config/deploy/server/#{file[:name]}")
+        rescue
+            erb_eval(File.expand_path("../../files/#{file[:name]}", __FILE__))
+        end
+        upload! eval_file, file_path # upload to the remote server
+        sudo :ln, "-nfs #{file_path} #{file[:path]}" # symlinks
       end
-    end
-  end
 
-  desc "Install the services"
-  task :services do
-    on roles(:app) do
-      services = fetch(:services)
-      services.each do |file|
-        file_path = upload_to_server(file)
-        sudo :cp, "#{file_path} /usr/lib/systemd/system/#{file[:name]}.service"
-        sudo :ln, "-nfs /usr/lib/systemd/system/#{file[:name]}.service /etc/systemd/system/multi-user.target.wants/#{file[:name]}.service"
-      end
-      # reload systemd
-      sudo :systemctl, "daemon-reload"
-      # enable services
-      services.each do |file|
-        sudo :systemctl, :enable, "#{file[:name]}.service"
-      end
+      # reload /etc/init
+      sudo :initctl, "reload-configuration"
     end
   end
 
   task :defaults do
       set :nginx_files, [
           {
-              filename: "nginx.conf.erb",
+              name: "nginx.conf.erb",
               path: "/etc/nginx/sites-enabled/#{fetch(:application)}"
           }
       ]
-      set :services, [
+      set :puma_files, [
            {
-               filename: "puma.service.erb",
-               name: "puma_#{fetch(:application)}"
+               name: "puma-manager.conf.erb",
+               path: "/etc/init/puma-manager.conf"
            },
+           {
+               name: "puma-upstart.conf.erb",
+               path: "/etc/init/puma.conf"
+           },
+           {
+               name: "puma.conf.erb",
+               path: "/etc/puma.conf"
+           }
        ]
   end
+
+  before "server:setup", "server:defaults"
+
 end
