@@ -49,8 +49,8 @@ namespace :server do
       services = fetch(:services)
       services.each do |file|
         file_path = upload_to_server(file)
-        sudo :cp, "#{file_path} /usr/lib/systemd/system/#{file[:name]}.service"
-        sudo :ln, "-nfs /usr/lib/systemd/system/#{file[:name]}.service /etc/systemd/system/multi-user.target.wants/#{file[:name]}.service"
+        sudo :cp, "#{file_path} /etc/systemd/system/#{file[:name]}.service"
+        sudo :ln, "-nfs /etc/systemd/system/#{file[:name]}.service /etc/systemd/system/multi-user.target.wants/#{file[:name]}.service"
       end
       # reload systemd
       sudo :systemctl, "daemon-reload"
