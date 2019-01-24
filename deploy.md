@@ -216,11 +216,12 @@ Grant deployer user to write the config files and to execute the init scripts
 ```
 # visudo
 deployer ALL=(ALL) NOPASSWD: /etc/init.d/elasticsearch
-deployer ALL=(ALL) NOPASSWD: /bin/ln -* /* /etc/nginx/sites-enabled/*
-deployer ALL=(ALL) NOPASSWD: /sbin/start nginx, /sbin/stop nginx, /sbin/restart nginx, /sbin/reload nginx
-deployer ALL=(ALL) NOPASSWD: /sbin/start puma app=*, /sbin/stop puma app=*, /sbin/restart puma app=*, /sbin/status puma app=*
-deployer ALL=(ALL) NOPASSWD: /bin/ln -* /* /etc/init/puma.conf, /bin/ln -* /* /etc/init/puma-manager.conf, /bin/ln -* /* /home/resj/apps/*, /bin/ln -* /* /etc/puma.conf
-deployer ALL=(ALL) NOPASSWD: /sbin/initctl reload-configuration
+deployer ALL=(ALL) NOPASSWD: /bin/systemctl * nginx.service
+deployer ALL=(ALL) NOPASSWD: /bin/systemctl * puma_nameoftheproject.service
+deployer ALL=(ALL) NOPASSWD: /bin/ln -nfs /* /etc/nginx/sites-enabled/*
+deployer ALL=(ALL) NOPASSWD: /bin/ln -nfs /* /etc/systemd/system/multi-user.target.wants/*
+deployer ALL=(ALL) NOPASSWD: /bin/cp /* /usr/lib/systemd/system/*
+deployer ALL=(ALL) NOPASSWD: /bin/systemctl daemon-reload
 ```
 
 # First deployment
