@@ -124,6 +124,12 @@ sudo -u postgres psql
 > create database resj_production owner resj;
 ```
 
+If you need to enable an extension, hstore for example:
+```
+sudo -u postgres psql dbname
+> CREATE EXTENSION hstore;
+```
+
 ## Git
 
 ```
@@ -220,7 +226,7 @@ deployer ALL=(ALL) NOPASSWD: /bin/systemctl * nginx.service
 deployer ALL=(ALL) NOPASSWD: /bin/systemctl * puma_nameoftheproject.service
 deployer ALL=(ALL) NOPASSWD: /bin/ln -nfs /* /etc/nginx/sites-enabled/*
 deployer ALL=(ALL) NOPASSWD: /bin/ln -nfs /* /etc/systemd/system/multi-user.target.wants/*
-deployer ALL=(ALL) NOPASSWD: /bin/cp /* /usr/lib/systemd/system/*
+deployer ALL=(ALL) NOPASSWD: /bin/cp /* /etc/systemd/system/*
 deployer ALL=(ALL) NOPASSWD: /bin/systemctl daemon-reload
 ```
 
